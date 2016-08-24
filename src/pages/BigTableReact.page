@@ -11,78 +11,87 @@
     <script type="text/babel">
           
           
-      var Account = React.createClass({
+    var Account = React.createClass({
         render: function() {
-          return (
-            <tr>
-          <td>
-                Account:
-              </td>
-          <td>
-                {this.props.name}
-              </td>
-              <td>
-                {this.props.text}
-              </td>
-            </tr>
-          );
+        	//console.log(this.props.account);
+        	//Itero sugli header che mi vengono passati dall'AccountList per stapare quelli che voglio mostrare
+            return (
+                <tr>
+                	{
+                		this.props.headersToShow.map(function(header){
+                			return (<td key={header}> {this.props.account[header]} </td>);
+                		}.bind(this))
+                	}    
+            	</tr>
+         	);
         }
-      });
+    });
 
-      var Table = React.createClass({
+    var Table = React.createClass({
         loadCommentsFromServer: function() {
-          BigTableController.getAllAccounts(function(result, event) {
-                          this.setState({data: result});
-                      }.bind(this)); 
+    	    BigTableController.getAllAccounts(function(result, event) {
+         		                 this.setState({data: result});
+                			      }.bind(this)); 
         },
         updateAccounts: function() {
-             this.setState({data: this.state.data.reverse()});
-         },
+            this.setState({data: this.state.data.reverse()});
+        },
         getInitialState: function() {
-          return {data: []};
+        	return {data: []};
         },
         componentDidMount: function() {
-          this.loadCommentsFromServer();
+        	this.loadCommentsFromServer();
         },
         handleClick() {
-          this.updateAccounts();
-          console.log('CLICK');
+        	this.updateAccounts();
+        	console.log('CLICK');
         },
         render: function() {
-          return (
-            <div>
-              <h1>Accounts retrieved</h1><br />
-          <button onClick={this.handleClick}>Reverse order</button>
-          <table>
-                <AccountList data={this.state.data} />
-          </table>
-            </div>
-          );
+        	//console.log(this.props.headers);
+        	return (
+            	<div>
+              		<h1>Accounts retrieved</h1><br />
+          			<button onClick={this.handleClick}>Reverse order</button>
+                	<AccountList data={this.state.data} headersToShow={this.props.headers} />
+            	</div>
+          	);
         }
-      });
+    });
 
-      var AccountList = React.createClass({
+    var AccountList = React.createClass({
         render: function() {
-          var account = this.props.data.map(function(acc) {
-            return (
-              <Account name={acc.Name} key={acc.Id} text=
-                {acc.Id}>
-              </Account>
-            );
-          });
-          return (
-            <tbody>
-              {account}
-            </tbody>
-          );
+        	var accountList = this.props.data.map(function(acc) {
+            	return (
+              		<Account account={acc} headersToShow={this.props.headersToShow} key={acc.Id}>
+              		</Account>
+            	);
+          	}.bind(this));
+
+          	var headers = this.props.headersToShow.map(function(header){
+          		return (
+          				<th> {header} </th>
+          			);
+          	}.bind(this));
+        	return (
+        		<table>
+	        		<thead>
+	        			<tr>{headers}</tr>
+	        		</thead>
+	            	<tbody>
+	              		{accountList}
+	            	</tbody>
+	            </table>
+          	);
         }
-      });
+    });
 
+    //Specifico qui la lista degli header e li passo tramite props fino alla riga singola dell'account per stampare i campi corretti
+    var headers = ['Name', 'Id'];
 
-      ReactDOM.render(
-        <Table />,
-        document.getElementById('container')
-      );
+    ReactDOM.render(
+        <Table headers={headers} />,
+    	    document.getElementById('container')
+    );
 
   
     </script>
