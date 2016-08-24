@@ -1,0 +1,55 @@
+<apex:page sidebar="false" showHeader="true" controller="BigTableController"  docType="html-5.0">	
+	<html xmlns:v-on="http://fake.org/fake" >
+
+
+	<apex:includeScript value="{!URLFOR($Resource.vue)}" />
+	<script type="text/javascript">
+		BigTableController.getAllAccounts(function(result, event) {
+			console.log("Risultati ottenuti");
+			
+			var vm = new Vue({
+			    el: '#table',
+			    data: {
+			    	ricerca: '',
+			        accounts: result
+			    },
+			    ready: function () {
+    				console.log("Finito render");
+  				},
+  				methods: {
+  					modifica: function() {
+  						for(var i=0; i<5000; i++) {
+  							this.accounts.$set(i, {Name: 'Pippo', OwnerId: 'Owner', CreatedDate: 'Data', LastModifiedDate: 'Modifica'});
+  						}
+  					},
+  					aggiungi: function() {
+  						for(var i=0; i<5000; i++) {
+  							this.accounts.push(i, {Name: 'Pluto', OwnerId: 'Owner', CreatedDate: 'Data', LastModifiedDate: 'Modifica'});
+  						}
+  					},
+  				}
+			});
+
+	    });
+	</script>
+	
+		<div id="table">
+			<a href="#" v-on:click="modifica">Modifica elementi</a><br/>
+			<a href="#" v-on:click="aggiungi">Aggiungi elementi</a><br/>
+			<br/>
+			<input v-model="ricerca"/>
+			<br/>
+			<table>
+				<tr v-for="a in accounts | filterBy ricerca in 'Name'">
+					<td>{{ a.Name }}</td>
+					<td>{{ a.OwnerId }}</td>
+					<td>{{ a.CreatedDate }}</td>
+					<td>{{ a.LastModifiedDate }}</td>
+				</tr>	
+			</table>
+		</div>
+
+
+	</html>
+
+</apex:page>

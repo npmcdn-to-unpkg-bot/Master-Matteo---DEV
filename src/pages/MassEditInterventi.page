@@ -1,0 +1,87 @@
+<apex:page showHeader="true" sidebar="true" standardController="Commessa__c" extensions="ExtMassEditInterventi" title="Modifica massiva interventi" action="{!getInterventi}">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <apex:outputText rendered="{!$User.UITheme != 'Theme4d' && $User.UITheme != 'Theme4t'}">
+        <apex:sectionHeader title="Modifica massiva interventi" subtitle="Modifica massiva interventi" />
+        <apex:form >
+            <apex:pageBlock title="Interventi">
+                <apex:pageBlockButtons >
+                    <apex:commandButton value="Salva" action="{!updateInterventi}" />
+                    <apex:commandButton value="Annulla" action="{!cancel}" immediate="true" />
+                </apex:pageBlockButtons>
+                <apex:outputPanel id="messages">
+                    <apex:pageMessages escape="false" />
+                </apex:outputPanel>
+                <apex:pageBlockTable value="{!interventi}" var="i">
+                    <apex:column headerValue="Nome intervento">
+                        <apex:inputField value="{!i.Name}" />
+                    </apex:column>
+                    <apex:column headerValue="Titolare">
+                        <apex:inputField value="{!i.OwnerId}" />
+                    </apex:column>
+                    <apex:column headerValue="Tipologia intervento">
+                        <apex:inputField value="{!i.Tipologia_intervento__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Ore lavorate">
+                        <apex:inputField value="{!i.Ore_lavorate__c}" />
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:form>
+    </apex:outputText>
+    <!-- Lightning Experience and Salesforce 1 -->
+    <apex:outputText rendered="{!$User.UITheme == 'Theme4d' || $User.UITheme == 'Theme4t'}">
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS100, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <apex:form >
+            <apex:actionFunction name="saveAction" action="{!updateInterventi}" />
+            <apex:outputPanel >
+                <div class="slds">
+                    <div class="slds-card">
+                        <div class="slds-card__header slds-grid">
+                            <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <svg aria-hidden="true" class="slds-icon slds-icon-action-edit slds-icon--small">
+                                        <use xlink:href="/assets/icons/action-sprite/svg/symbols.svg#edit"></use>
+                                    </svg>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-text-heading--small slds-truncate">Modifica massiva interventi</h2>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-no-flex slds-align-bottom">
+                                <div class="slds-button-group" role="group">
+                                    <a href="javascript:void(0)" onclick="saveAction()" class="slds-button slds-button--neutral">Salva</a>
+                                    <a href="{!URLFOR($Action.Commessa__c.View, commessaId)}" class="slds-button slds-button--neutral">Annulla</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-card__body">
+                            <table value="" class="slds-table slds-table--bordered">
+                                <thead>
+                                    <tr class="slds-text-heading--label">
+                                        <th scope="col"><span class="slds-truncate">Nome intervento *</span></th>
+                                        <th scope="col"><span class="slds-truncate">Titolare</span></th>
+                                        <th scope="col"><span class="slds-truncate">Tipologia intervento *</span></th>
+                                        <th scope="col"><span class="slds-truncate">Ore lavorate *</span></th>
+                                    </tr>
+                                </thead>
+                                <apex:repeat value="{!interventi}" var="i">
+                                    <tbody>
+                                        <tr>
+                                            <td data-label="nome"><apex:inputField value="{!i.Name}" styleClass="slds-input" /> </td>
+                                            <!-- Lookup not syled -->
+                                            <td data-label="owner"><apex:inputField value="{!i.OwnerId}" /> </td>
+                                            <td data-label="tipologia"><apex:inputField value="{!i.Tipologia_intervento__c}" styleClass="slds-input" /></td>
+                                            <td data-label="ore lavorate"><apex:inputField value="{!i.Ore_lavorate__c}" styleClass="slds-input" required="true" /> </td>
+                                        </tr>
+                                    </tbody>
+                                </apex:repeat>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+        </apex:form>
+    </apex:outputText>
+
+    </html>
+</apex:page>

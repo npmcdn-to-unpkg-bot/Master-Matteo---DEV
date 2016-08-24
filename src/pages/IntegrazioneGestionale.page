@@ -1,0 +1,13 @@
+<apex:page showHeader="true" sidebar="true" controller="CtrlIntegrazioneGestionale" title="Integrazione gestionale">
+	<apex:sectionHeader title="Integrazione gestionale" subtitle="Integra con gestionale" />
+
+<apex:pageMessages ></apex:pageMessages>
+
+<apex:form >
+	<apex:pageBlock title="Integrazione">
+		<apex:pageBlockButtons location="top">
+			<apex:commandButton value="Avvia integrazione" action="{!avviaIntegrazione}"/>
+		</apex:pageBlockButtons>
+	</apex:pageBlock>
+</apex:form>	
+</apex:page>

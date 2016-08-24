@@ -1,0 +1,51 @@
+<apex:page showHeader="true" sidebar="true" controller="CtrlSearchCommesse" title="Ricerca commesse">
+	<apex:sectionHeader title="Ricerca commesse" subtitle="Ricerca commesse" />
+	<apex:form >
+		<apex:pageBlock title="Filtri" mode="edit">
+			<apex:pageBlockButtons location="bottom">
+				<apex:commandButton value="Cerca" action="{!search}"/>
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection title="Filtri su cliente">
+				<apex:inputText value="{!filtriAccount.Name}" />
+				<apex:inputField value="{!filtriAccount.Type}" />
+				<apex:inputField value="{!filtriAccount.Industry}" />
+			</apex:pageBlockSection>
+			<apex:pageBlockSection title="Filtri su commessa">
+				<apex:inputField value="{!filtriCommessa.Name}" />
+				<apex:inputField value="{!filtriCommessa.Data_inizio__c}" />
+				<apex:inputField value="{!filtriCommessa.Data_fine__c}" />
+				<apex:inputField value="{!filtriCommessa.PM__c}" />
+			</apex:pageBlockSection>
+			<apex:pageBlockSection title="Filtri su intervento">
+				<apex:inputField value="{!filtriIntervento.Name}" />
+				<apex:inputField value="{!filtriIntervento.Tipologia_intervento__c}" />
+				<apex:inputText value="{!filtriIntervento.Ore_lavorate__c}" required="false" />
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		<apex:pageBlock title="Ricerca testuale">
+			<apex:pageBlockButtons location="bottom">
+				<apex:commandButton value="Cerca" action="{!fullTextSearch}"/>
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection >
+				<apex:pageBlockSectionItem >
+					Chiave di ricerca
+					<apex:inputText value="{!chiaveDiRicercaTestuale}" />
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+
+		<apex:inputHidden value="{!selectedCommessa}" id="selCommessa"/>
+
+		<apex:pageBlock title="Risultati" rendered="{!NOT(commesse.empty)}">
+			<apex:pageBlockTable value="{!commesse}" var="c">
+				<apex:column >
+					<apex:outputLink value="/{!c.Id}">{!c.Name}</apex:outputLink>
+					</apex:column>
+				<apex:column value="{!c.Account__c}" />
+				<apex:column headerValue="Azioni">
+					<apex:commandButton value="Assegna" onclick="document.getElementById('{!$Component.selCommessa}').value = '{!c.Id}';" action="{!assegna}" />
+				</apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

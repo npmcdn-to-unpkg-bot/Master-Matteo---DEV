@@ -1,0 +1,91 @@
+<apex:page sidebar="false" showHeader="true" controller="BigTableController" docType="html-5.0">    
+    <head>
+        <title>Hello React!</title>
+        <apex:includeScript value="{!URLFOR($Resource.reactadd)}" />
+        <apex:includeScript value="{!URLFOR($Resource.reactdom)}" />
+        <apex:includeScript value="https://npmcdn.com/babel-core@5.8.38/browser.min.js" />
+    </head>
+    <div id="container">
+    </div>
+
+    <script type="text/babel">
+          
+          
+      var Account = React.createClass({
+        render: function() {
+          return (
+            <tr>
+          <td>
+                Account:
+              </td>
+          <td>
+                {this.props.name}
+              </td>
+              <td>
+                {this.props.text}
+              </td>
+            </tr>
+          );
+        }
+      });
+
+      var Table = React.createClass({
+        loadCommentsFromServer: function() {
+          BigTableController.getAllAccounts(function(result, event) {
+                          this.setState({data: result});
+                      }.bind(this)); 
+        },
+        updateAccounts: function() {
+             this.setState({data: this.state.data.reverse()});
+         },
+        getInitialState: function() {
+          return {data: []};
+        },
+        componentDidMount: function() {
+          this.loadCommentsFromServer();
+        },
+        handleClick() {
+          this.updateAccounts();
+          console.log('CLICK');
+        },
+        render: function() {
+          return (
+            <div>
+              <h1>Accounts retrieved</h1><br />
+          <button onClick={this.handleClick}>Reverse order</button>
+          <table>
+                <AccountList data={this.state.data} />
+          </table>
+            </div>
+          );
+        }
+      });
+
+      var AccountList = React.createClass({
+        render: function() {
+          var account = this.props.data.map(function(acc) {
+            return (
+              <Account name={acc.Name} key={acc.Id} text=
+                {acc.Id}>
+              </Account>
+            );
+          });
+          return (
+            <tbody>
+              {account}
+            </tbody>
+          );
+        }
+      });
+
+
+      ReactDOM.render(
+        <Table />,
+        document.getElementById('container')
+      );
+
+  
+    </script>
+
+
+</apex:page>

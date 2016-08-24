@@ -1,0 +1,47 @@
+<apex:page sidebar="false" showHeader="true" controller="BigTableController" docType="html-5.0">	
+	<head>
+	    <title>Hello Knockout!</title>
+	    <apex:includeScript value="{!URLFOR($Resource.knockout)}" />
+	    <apex:includeScript value="{!URLFOR($Resource.jquery)}" />
+  	</head>
+
+  	<a href="#" data-bind="click: modifica">Modifica elementi</a><br/>
+
+  	<br/>
+  	<table data-bind="foreach: accounts">
+		<tr>
+			<td data-bind="text: Name"></td>
+			<td data-bind="text: OwnerId"></td>
+			<td data-bind="text: CreatedDate"></td>
+			<td data-bind="text: LastModifiedDate"></td>
+		</tr>	
+	</table>
+
+	<script>
+    // Knockout
+    var vm;
+    $(document).ready(function() {
+        vm = new ViewModel();
+        ko.applyBindings(vm);
+        BigTableController.getAllAccounts(function(result, event) {
+			vm.accounts(result);
+		});
+    });
+    function ViewModel() {
+        var self = this;
+        this.accounts = ko.observableArray().extend({ deferred: true });
+        this.modifica = function() {
+    	  	for(var i=0; i<5000; i++) {
+    	  		self.accounts.replace(self.accounts()[i], {
+					Name: 'Pippo',
+		            OwnerId: 'Owner',
+		            CreatedDate: 'Data',
+		            LastModifiedDate: 'Modifica'
+        		});
+			}
+        }
+    }
+
+    </script>
+
+</apex:page>
