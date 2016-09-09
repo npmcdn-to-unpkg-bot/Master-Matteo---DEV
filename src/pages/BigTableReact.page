@@ -3,7 +3,7 @@
         <title>Hello React!</title>
         <apex:includeScript value="{!URLFOR($Resource.reactadd)}" />
         <apex:includeScript value="{!URLFOR($Resource.reactdom)}" />
-        <apex:includeScript value="https://npmcdn.com/babel-core@5.8.38/browser.min.js" />
+        <apex:includeScript value="https://unpkg.com/babel-core@5.8.38/browser.min.js" />
     </head>
     <div id="container">
     </div>
